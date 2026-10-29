@@ -30,7 +30,7 @@ works on macOS and Linux.
    and clone it. With one worktree per branch:
 
    ```sh
-   git clone --bare git@github.com:you/my-project.git my-project/.bare
+   git clone --bare https://github.com/you/my-project.git my-project/.bare
    cd my-project && echo "gitdir: ./.bare" > .git
    git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
    git fetch origin && git worktree add main main && cd main
