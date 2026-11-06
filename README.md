@@ -73,6 +73,55 @@ What you get:
 
 <!-- template:end -->
 
+## Using the spec workflow
+
+Every change starts in [`spec/`](spec/README.md), as a row with an ID, a status and a way
+to verify it. Code follows the spec, never the other way round. You drive it from Claude
+Code with three skills:
+
+| You want | Run | What happens |
+|----------|-----|--------------|
+| New behaviour or a change | `/spec-feature <request>` | Drafts the spec rows (status `planned`) and asks you to approve them. |
+| To fix a bug | `/spec-bug <report>` | Reproduces it, finds the root cause, and drafts the spec row that was missing, with a failing check. |
+| The approved work built | `/spec-implement` | Works through `spec/roadmap.md`: the verification backlog first, then planned rows in order. |
+| To ship | `/spec-release` | Pushes `main` and releases the version `scripts/release-check.sh` recommends. |
+
+### A typical change
+
+1. **Ask.** Run `/spec-feature add CSV export`. Claude researches where the behaviour
+   would live, then proposes new requirement rows and any roadmap changes. It writes no
+   code.
+2. **Approve.** Choose **approve and implement** to build it straight away, or
+   **approve the spec only** to commit the rows as `planned` and stop. Edit the wording
+   first if a row isn't what you meant.
+3. **Implement.** `/spec-implement` takes each outstanding row in roadmap order: code,
+   then `scripts/check.sh`, then the `spec-verifier` subagent re-reading the change
+   against the row. It sets the row to `done` (or `partial`, with the gap written in)
+   and commits with a `Spec: ID` trailer. It asks you when the spec leaves a question
+   open, and never pushes.
+4. **Release.** `/spec-release` pushes `main` and tags a patch or minor release; it asks
+   before a major one.
+
+Use `/spec-implement` on its own to pick up work you approved earlier, and put the rows in
+`spec/roadmap.md` in the order you want them built.
+
+### Things to know
+
+- **Status values:** `planned` (agreed, not built), `partial` (built with a known gap),
+  `done` (built and verified), `dropped` (no longer wanted). IDs are permanent: never
+  renumber or reuse one.
+- **Commits:** `spec: <summary>` for spec changes, committed before the code; a
+  `Spec: ID, ID` trailer on code commits; `BREAKING` in the body for incompatible changes.
+- **Gaps are bugs in the spec.** If code needs behaviour no row describes, go back and
+  add the row first. `/spec-bug` exists for the case where a bug slipped past because the
+  spec didn't pin the behaviour down.
+- **Partial verification is reported, not hidden.** If a manual check couldn't be run,
+  the report says so.
+- **Add a spec file** (with a new ID prefix) when a feature area doesn't fit the existing
+  ones, and list it in `spec/README.md`.
+
+`CLAUDE.md` has the full rules, and the skills themselves are in `.claude/skills/`.
+
 ## Development
 
 What the project does is written down in [`spec/`](spec/README.md); see
