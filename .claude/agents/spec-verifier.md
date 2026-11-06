@@ -1,6 +1,6 @@
 ---
 name: spec-verifier
-description: Independent check of a code change against the spec rows it claims to implement, before it is committed. Use in /implement step 3 for each item, and whenever a change needs a second reading against the spec. Give it the IDs and how to see the change (uncommitted diff or a commit range). Reports gaps; never edits.
+description: Independent check of a code change against the spec rows it claims to implement, before it is committed. Use in /spec-implement step 3 for each item, and whenever a change needs a second reading against the spec. Give it the IDs and how to see the change (uncommitted diff or a commit range). Reports gaps; never edits.
 tools: Read, Grep, Glob, Bash
 model: inherit
 ---

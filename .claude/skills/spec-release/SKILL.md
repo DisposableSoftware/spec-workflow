@@ -1,15 +1,15 @@
 ---
-name: release
-description: Push Template Project's main branch and act on scripts/release-check.sh's recommendation, releasing a patch or minor version automatically (bump, tag, notes, push, GitHub release) and asking first only for a major one. Use when the user runs /release.
+name: spec-release
+description: Push Template Project's main branch and act on scripts/release-check.sh's recommendation, releasing a patch or minor version automatically (bump, tag, notes, push, GitHub release) and asking first only for a major one. Use when the user runs /spec-release.
 argument-hint: [none|patch|minor|major|X.Y.Z to override the recommendation]
 disable-model-invocation: true
 ---
 
-# /release — push, and release when the commits call for it
+# /spec-release — push, and release when the commits call for it
 
 Override: $ARGUMENTS
 
-The user running `/release` is the go-ahead to push `main` and, when the commits call for it, to publish a release. Don't ask again except where this skill says to. The scripts do the work: `scripts/release-check.sh` recommends a level, and `scripts/release.sh` bumps, checks, commits, tags and drafts the notes (see "Releasing" in `CLAUDE.md`).
+The user running `/spec-release` is the go-ahead to push `main` and, when the commits call for it, to publish a release. Don't ask again except where this skill says to. The scripts do the work: `scripts/release-check.sh` recommends a level, and `scripts/release.sh` bumps, checks, commits, tags and drafts the notes (see "Releasing" in `CLAUDE.md`).
 
 Always push with `NO_RELEASE_CHECK=1`. The pre-push hook would otherwise offer the same release again, interactively.
 

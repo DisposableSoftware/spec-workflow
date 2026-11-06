@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# The one gate before every code commit and release (TOOL-10). /implement, /release and
+# The one gate before every code commit and release (TOOL-10). /spec-implement, /spec-release and
 # scripts/release.sh run it. Add the project's build, lint and test commands at the end.
 set -euo pipefail
 cd "$(dirname "$0")/.."

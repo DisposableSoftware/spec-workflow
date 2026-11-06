@@ -49,18 +49,18 @@ works on macOS and Linux.
 3. Set up the stack. Add your build, lint and test commands to `scripts/check.sh` and the
    Commands section of `CLAUDE.md`, and the files your stack ignores to `.gitignore`.
 4. Edit `spec/product.md` to say what the project is, its non-goals and its stack
-   constraints. Then start Claude Code and ask for features with `/feature`, fixes with
-   `/bug`, and planned work with `/implement`.
+   constraints. Then start Claude Code and ask for features with `/spec-feature`, fixes with
+   `/spec-bug`, and planned work with `/spec-implement`.
 
 What you get:
 
 - **`spec/`**: every behaviour as a numbered requirement with a status and how it is
   verified. `CLAUDE.md` makes every change go spec first: a `spec:` commit, then code
   with a `Spec: ID` trailer.
-- **`/feature`, `/bug` and `/implement`** (`.claude/skills/`): `/feature` drafts the spec
-  change and `/bug` reproduces a bug and drafts the spec gap; both ask you to approve
-  and implement, or approve the spec only. `/implement` builds the roadmap's approved
-  rows in order, one verified commit each.
+- **`/spec-feature`, `/spec-bug` and `/spec-implement`** (`.claude/skills/`):
+  `/spec-feature` drafts the spec change and `/spec-bug` reproduces a bug and drafts the
+  spec gap; both ask you to approve and implement, or approve the spec only.
+  `/spec-implement` builds the roadmap's approved rows in order, one verified commit each.
 - **Subagents** (`.claude/agents/`): `spec-researcher` does the read-only code survey and
   bug tracing, so file dumps stay out of the main conversation, and `spec-verifier`
   checks each change against its rows before it is committed, with fresh eyes.
@@ -69,7 +69,7 @@ What you get:
   with nothing verifying them, and a roadmap out of step with the spec.
 - **Releases**: `release-check.sh` recommends a semver bump from the spec's status
   changes, `release.sh` bumps `VERSION`, tags and drafts notes, the pre-push hook offers
-  to do it all when you push main, and `/release` does it from Claude Code.
+  to do it all when you push main, and `/spec-release` does it from Claude Code.
 
 <!-- template:end -->
 

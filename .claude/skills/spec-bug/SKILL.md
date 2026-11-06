@@ -1,15 +1,15 @@
 ---
-name: bug
-description: Turn a bug report for Template Project into a reproduction, a root cause, and the spec change that makes the expected behaviour explicit, then ask the user to approve it and either implement the fix through /implement or leave it planned. Use when the user runs /bug.
+name: spec-bug
+description: Turn a bug report for Template Project into a reproduction, a root cause, and the spec change that makes the expected behaviour explicit, then ask the user to approve it and either implement the fix through /spec-implement or leave it planned. Use when the user runs /spec-bug.
 argument-hint: <what went wrong, and what you expected>
 disable-model-invocation: true
 ---
 
-# /bug — reproduce, close the spec gap, approve
+# /spec-bug — reproduce, close the spec gap, approve
 
 Report: $ARGUMENTS
 
-Follow the spec-first workflow in `CLAUDE.md`. A bug means the spec failed to pin down the behaviour, or the checks failed to hold the code to it. This skill fixes both on paper: a reproduction that fails, and a spec change that says what should happen. The fix itself is built by `/implement` (`.claude/skills/implement/SKILL.md`), right away or later, as the user chooses in step 5.
+Follow the spec-first workflow in `CLAUDE.md`. A bug means the spec failed to pin down the behaviour, or the checks failed to hold the code to it. This skill fixes both on paper: a reproduction that fails, and a spec change that says what should happen. The fix itself is built by `/spec-implement` (`.claude/skills/spec-implement/SKILL.md`), right away or later, as the user chooses in step 5.
 
 ## 1. Understand the report
 
@@ -47,7 +47,7 @@ Classify the bug against the spec:
 
 Stop and ask with `AskUserQuestion` (quote the rows by ID and text, and give concrete options, recommended first) when:
 
-- **The spec asks for the reported behaviour.** Then it isn't a bug against the spec. Offer: change the spec (then continue as `/feature` does from its step 3), or keep it as is.
+- **The spec asks for the reported behaviour.** Then it isn't a bug against the spec. Offer: change the spec (then continue as `/spec-feature` does from its step 3), or keep it as is.
 - **The fix would change a `done` requirement beyond the bug**, or conflict with another requirement, a non-goal or a stack constraint in `spec/product.md`.
 - **There are several reasonable expected behaviours**, and the spec's conventions don't pick one.
 
@@ -64,8 +64,8 @@ Show the user:
 
 Then ask with `AskUserQuestion`:
 
-- **Approve and implement** (recommended): commit the spec and the reproduction, then fix it now through `/implement`.
-- **Approve spec only**: commit the spec and the reproduction, leave the rows in the roadmap for `/implement`, and stop.
+- **Approve and implement** (recommended): commit the spec and the reproduction, then fix it now through `/spec-implement`.
+- **Approve spec only**: commit the spec and the reproduction, leave the rows in the roadmap for `/spec-implement`, and stop.
 - **Revise**: the user says what to change. Apply it, re-check it as in step 4, then return to the start of step 5.
 - **Discard**: restore the spec files you changed and remove the reproduction, then stop.
 
@@ -74,6 +74,6 @@ Never treat silence, or an unrelated message, as approval.
 ## 6. After approval
 
 1. Commit the spec on its own: `spec: <summary> (ID)`. In the body, give the bug in one line (observed vs expected) and the root cause. Use the usual trailers.
-2. Commit the reproduction on its own: `Reproduce <summary>` with a `Spec: ID` trailer. A failing automated test would break `scripts/check.sh`, so commit it marked as an expected failure or skipped, using the test framework's own mechanism, with the reason `<ID>: fails until fixed`. `/implement` removes the marker. Manual scripts don't run in the checks and need no marker.
-3. **Approve spec only:** report the IDs now in the roadmap and stop. The user runs `/implement` when they want the fix.
-4. **Approve and implement:** read `.claude/skills/implement/SKILL.md` and follow it with these IDs as the limit. Its report is this skill's report, and it should show the regression check failing before the fix and passing after.
+2. Commit the reproduction on its own: `Reproduce <summary>` with a `Spec: ID` trailer. A failing automated test would break `scripts/check.sh`, so commit it marked as an expected failure or skipped, using the test framework's own mechanism, with the reason `<ID>: fails until fixed`. `/spec-implement` removes the marker. Manual scripts don't run in the checks and need no marker.
+3. **Approve spec only:** report the IDs now in the roadmap and stop. The user runs `/spec-implement` when they want the fix.
+4. **Approve and implement:** read `.claude/skills/spec-implement/SKILL.md` and follow it with these IDs as the limit. Its report is this skill's report, and it should show the regression check failing before the fix and passing after.

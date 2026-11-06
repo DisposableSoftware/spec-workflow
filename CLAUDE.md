@@ -6,7 +6,7 @@ _One line on what Template Project is. Say it properly in [`spec/product.md`](sp
 
 ## Spec-first workflow (mandatory)
 
-Every change follows these steps, in order. Three skills run them. `/feature` (`.claude/skills/feature/`) turns a request into spec rows, and `/bug` (`.claude/skills/bug/`) reproduces a bug and finds the spec gap that let it happen. Both end by asking the user to **approve and implement** or **approve the spec only**, and neither writes code itself. `/implement` (`.claude/skills/implement/`) builds what is approved: it works through `spec/roadmap.md`, the verification backlog first and then the listed rows in order, with one commit per requirement.
+Every change follows these steps, in order. Three skills run them. `/spec-feature` (`.claude/skills/spec-feature/`) turns a request into spec rows, and `/spec-bug` (`.claude/skills/spec-bug/`) reproduces a bug and finds the spec gap that let it happen. Both end by asking the user to **approve and implement** or **approve the spec only**, and neither writes code itself. `/spec-implement` (`.claude/skills/spec-implement/`) builds what is approved: it works through `spec/roadmap.md`, the verification backlog first and then the listed rows in order, with one commit per requirement.
 
 1. **Spec.** Before touching code, update the relevant `spec/*.md`.
    - **New behaviour or a changed requirement:** add or edit a requirement row. A new row gets the next free ID in its prefix, with status `planned`. If the request is unclear, settle the wording with the user before coding.
@@ -42,8 +42,8 @@ Keep the main conversation for the spec, decisions and edits. Hand research that
 
 | Agent | Use it for | Tools |
 |-------|------------|-------|
-| `spec-researcher` (`.claude/agents/`) | Where a behaviour lives now (`/feature` step 1), tracing a bug to its cause and finding the same mistake elsewhere (`/bug` step 3), mapping code to spec IDs | Read-only |
-| `spec-verifier` (`.claude/agents/`) | Checking a change against the rows it claims before each commit (`/implement` step 3) | Read-only, plus git through Bash |
+| `spec-researcher` (`.claude/agents/`) | Where a behaviour lives now (`/spec-feature` step 1), tracing a bug to its cause and finding the same mistake elsewhere (`/spec-bug` step 3), mapping code to spec IDs | Read-only |
+| `spec-verifier` (`.claude/agents/`) | Checking a change against the rows it claims before each commit (`/spec-implement` step 3) | Read-only, plus git through Bash |
 | `Plan` (built in) | An item that touches many files, before writing code | Read-only |
 
 - Brief each agent with the spec IDs, the question, and the worktree or paths to search. Ask for conclusions with `file:line` references, not file contents.
@@ -63,7 +63,7 @@ scripts/release.sh        bump VERSION, commit "Template Project X.Y.Z", tag, no
 scripts/init.sh           names a project made from the template, then removes itself  TOOL-9
 scripts/manual/           manual checks, one script per area, each naming its IDs
 .githooks/pre-push        on a push of main, offers to release                         TOOL-8
-.claude/skills/           /feature, /bug, /implement, /release
+.claude/skills/           /spec-feature, /spec-bug, /spec-implement, /spec-release
 .claude/agents/           spec-researcher, spec-verifier
 spec/                     the specification
 ```
@@ -80,7 +80,7 @@ spec/                     the specification
 
 The version lives in `VERSION`. If the stack keeps it somewhere else too (`package.json`, `Cargo.toml`, `pyproject.toml`), extend `set_version` in `scripts/release.sh`.
 
-`scripts/release-check.sh` recommends a bump from the commits since the last `v*` tag: major for `BREAKING` or a shipped requirement that became `dropped`, minor when a requirement became `done` or `partial`, patch for other changes outside `spec/`, docs and tooling. `scripts/release.sh LEVEL NOTES` bumps `VERSION`, runs `scripts/check.sh`, commits and tags, and drafts notes; then `git push origin main vX.Y.Z` and `gh release create vX.Y.Z -F NOTES`. With the hook enabled, pushing main offers all of this (`NO_RELEASE_CHECK=1` skips it). `/release` (`.claude/skills/release/`) runs all of this: it pushes main, releases a patch or minor bump without asking, and asks first for a major one. Otherwise ask before pushing.
+`scripts/release-check.sh` recommends a bump from the commits since the last `v*` tag: major for `BREAKING` or a shipped requirement that became `dropped`, minor when a requirement became `done` or `partial`, patch for other changes outside `spec/`, docs and tooling. `scripts/release.sh LEVEL NOTES` bumps `VERSION`, runs `scripts/check.sh`, commits and tags, and drafts notes; then `git push origin main vX.Y.Z` and `gh release create vX.Y.Z -F NOTES`. With the hook enabled, pushing main offers all of this (`NO_RELEASE_CHECK=1` skips it). `/spec-release` (`.claude/skills/spec-release/`) runs all of this: it pushes main, releases a patch or minor bump without asking, and asks first for a major one. Otherwise ask before pushing.
 
 ## Manual testing
 

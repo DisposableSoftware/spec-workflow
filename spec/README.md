@@ -8,7 +8,7 @@ This folder is the source of truth for what Template Project does. The code impl
 |------|--------|--------|
 | [product.md](product.md) | `PROD` | Goals, non-goals, platform and stack constraints |
 | [tooling.md](tooling.md) | `TOOL` | The workflow's own scripts: spec lint, checks, releases |
-| [roadmap.md](roadmap.md) | — | The order of planned work, which `/implement` follows |
+| [roadmap.md](roadmap.md) | — | The order of planned work, which `/spec-implement` follows |
 
 Add a file with a new prefix when a feature area doesn't fit these, and list it here. `scripts/spec-lint.sh` reads this table: every spec file must be listed, and its IDs must use its prefix.
 
@@ -29,4 +29,4 @@ Each requirement is one line in a table:
 - Write behaviour, not implementation. Keep the "how" short, and put it under **Implementation notes** when it is not obvious or a past attempt failed.
 - **Verified by** names the test, or says `manual:` with what to check. A `done` row must fill it in. Tables of standing constraints (like `product.md`) may leave the column out.
 
-`scripts/release-check.sh` reads the status column: a requirement that became `done` or `partial` since the last release means a minor bump, and a shipped one that became `dropped` means a major one. `/release` pushes `main` and acts on that recommendation.
+`scripts/release-check.sh` reads the status column: a requirement that became `done` or `partial` since the last release means a minor bump, and a shipped one that became `dropped` means a major one. `/spec-release` pushes `main` and acts on that recommendation.
